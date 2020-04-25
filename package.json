@@ -4,7 +4,9 @@
   "description": "Working with pg-promise module to create mock music database",
   "main": "server.js",
   "dependencies": {
-    "pg-promise": "^10.5.2"
+    "co": "^4.6.0",
+    "pg-promise": "^10.5.2",
+    "prompt-promise": "^1.0.3"
   },
   "devDependencies": {},
   "scripts": {

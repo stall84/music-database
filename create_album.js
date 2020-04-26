@@ -26,7 +26,10 @@ let res = {
   albumArtist: ''
 };
 
-prompt('Add album name: ')
+prompt(`Welcome to the ${config.database} database. Press enter to start input of album data`)
+    .then(function goToInput() {
+        return prompt.multiline('Enter album name: ');
+    })
     .then(function albumName(val) {
         res.albumName = val;
         return prompt.multiline('Enter album release year: ');
@@ -48,9 +51,9 @@ prompt('Add album name: ')
 
 function addAlbum () {
 
-    let query2 = "INSERT INTO album (album_name, release_year, artist_id) VALUES (${albumName}, ${albumYear}, ${albumArtist});";
+    let query = "INSERT INTO album (album_name, release_year, artist_id) VALUES (${albumName}, ${albumYear}, ${albumArtist});";
         
-    db.result(query2, res)
+    db.result(query, res)
         .then(function(res) {
             console.log(res);
         })

@@ -21,7 +21,10 @@ let res = {
   artistName: '',
 };
 
-prompt('Enter artist name: ')
+prompt(`Welcome to the ${config.database} database. Press enter to start input of artist data`)
+    .then(function goToInput() {
+        return prompt.multiline('Enter artist name: ');
+    })
     .then(function artistName(value) {
         res.artistName = value;
         console.log(res);
@@ -35,14 +38,14 @@ prompt('Enter artist name: ')
 
 function addArtist () {
 
-    let query1 = "INSERT INTO artist (artist_name) VALUES ($1);";
+    let query = "INSERT INTO artist (artist_name) VALUES ($1);";
 
-    db.result(query1, res.artistName)
+    db.result(query, res.artistName)
         .then(function(res) {
             console.log(res);
         })
         .catch((err) => {
-            console.error('This MESSED up: ' + err);
+            console.error('There was an error uploading to database: ' + err.stack);
         });
 };
 

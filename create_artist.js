@@ -13,8 +13,8 @@ const db = pgp(config);
 const co = require('co');
 const prompt = require('prompt-promise');
 
-exports.db = db;
-exports.prompt = prompt;
+//module.exports = db;
+//module.exports = prompt;
 
 // Attempting to create an object to store values from prompt-promise in .. running into problems though and it's returning
 let res = {

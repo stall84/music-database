@@ -13,7 +13,7 @@ CREATE TABLE album (
 CREATE TABLE song (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    duration INTEGER,
+    duration VARCHAR(5),
     release_year INTEGER
 );
 

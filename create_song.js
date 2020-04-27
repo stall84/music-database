@@ -28,7 +28,7 @@ prompt(`Welcome to the ${config.database} database. Press enter to start input o
     })
     .then(function addName(val) {
         entries.name = val;
-        return prompt.multiline('Please enter song duration in seconds (ie 180 for 3min): ');
+        return prompt.multiline('Please enter song duration in format mm:ss : ');
     })
     .then(function addTime(val) {
         entries.duration = val;
@@ -47,7 +47,7 @@ prompt(`Welcome to the ${config.database} database. Press enter to start input o
 
 function addTrack () {
 
-    let query = "INSERT INTO song (name, duration, release_year) VALUES (${name}, ${duration}, ${release_year});"
+    let query = "INSERT INTO song (name, duration, release_year) VALUES (${name}, ${duration}, ${release_year});";
 
     db.result(query, entries)
         .then((result) => {
@@ -56,4 +56,4 @@ function addTrack () {
         .catch((err) => {
             console.error('Ouch! There was a problem uploading data to db: ' + err.stack);
         });
-}    
+};    

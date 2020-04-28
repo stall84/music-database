@@ -14,12 +14,12 @@ const co = require('co');
 const prompt = require('prompt-promise');
 
 
- /* Attempted to export modules and require them here, but ran into errors
+  //Attempted to export modules and require them here, but ran into errors
 
-const db = require('./create_artist');
-const prompt = require('./create_artist');
+//const db = require('./create_artist');
+//const prompt = require('./create_artist');
 
-*/
+
 
 let res = {
   albumName: '',

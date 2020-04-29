@@ -1,4 +1,4 @@
-
+/*
 const config = {
 
     host: 'localhost',
@@ -19,6 +19,9 @@ const prompt = require('prompt-promise');
 //const db = require('./create_artist');
 //const prompt = require('./create_artist');
 
+*/
+
+const Sequelize = require('sequilize');
 
 
 let res = {

@@ -7,6 +7,11 @@ const { Artist, Album, Song, Track } = require('./sequelize');
 var artistObj = {
     name: ''
 };
+var albumObj = {
+    name: '',
+    artID: '',
+    year: ''
+};
 
 prompt(`Welcome to the music database. Press enter to start`)
     .then(function goToInput() {
@@ -19,6 +24,19 @@ prompt(`Welcome to the music database. Press enter to start`)
     })
     .then(function displayAll() {
         queryArtists();
+        return prompt.multiline('Enter album name: ')
+    })
+    .then(function startAlbum(val) {
+        albumObj.name = val;
+        return prompt.multiline('Enter artist-ID: ')
+    })
+    .then(function addID(val) {
+        albumObj.artID = val;
+        return prompt.multiline('Enter album release year: ')
+    })
+    .then(function addYr(val) {
+        albumObj.year = val;
+        addAlbum();
         prompt.done();
     })
     .catch((err) => {
@@ -47,5 +65,14 @@ function queryArtists() {
         })
         .catch((err) => {
             console.error('Bro.. Did you really think this would work? ' + err.stack);
+        });
+}
+function addAlbum() {
+    Album.create( { album_name: albumObj.name, artist_id: albumObj.artID, release_year: albumObj.year })
+        .then((res) => {
+            console.log('You successfully updated the album table' + res)
+        })
+        .catch((err) => {
+            console.error('You screwed the puppy! ' + err.stack)
         });
 }

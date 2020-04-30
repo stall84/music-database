@@ -17,12 +17,14 @@ const sequelize = new Sequelize('music_db','postgres','postgres', {
 
 // instantiate your models (being imported in from models folder) passing in first an instance of sequelize and then the Sequelize library 
 const Artist = ArtistModel(sequelize, Sequelize);
-/*
+
 const Album = AlbumModel(sequelize, Sequelize);
+/*
 const Song = SongModel(sequelize, Sequelize);
 const Track = TrackModel(sequelize, Sequelize);
 */
 
 module.exports = {
-    Artist
+    Artist,
+    Album
 };

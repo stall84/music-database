@@ -1,34 +1,43 @@
 
-const config = {
-
-    host: 'localhost',
-    port: 5432,
-    database: 'music_db',
-    user: 'postgres'
-
-};
-
-const pgp = require('pg-promise')();
-const db = pgp(config);
-const co = require('co');
+const Sequelize = require('sequelize');
 const prompt = require('prompt-promise');
 
-//module.exports = db;
-//module.exports = prompt;
+const sequelize = new Sequelize('music_db', 'postgres', 'postgres', {
+    host: 'localhost',
+    dialect: 'postgres'
+});
 
-// Attempting to create an object to store values from prompt-promise in .. running into problems though and it's returning
-let res = {
-  artistName: '',
+const Model = Sequelize.Model;
+
+class Artist extends Model {};
+
+Artist.init({
+    artist_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+}, {
+    sequelize, 
+    modelName: 'Artist',
+    tableName: 'artist',
+    timestamps: false
+});
+
+var valObj = {
+    name: ''
 };
 
-prompt(`Welcome to the ${config.database} database. Press enter to start input of artist data`)
+prompt(`Welcome to the music database. Press enter to start`)
     .then(function goToInput() {
-        return prompt.multiline('Enter artist name: ');
+        return prompt.multiline('Please enter new artist name: ');
     })
-    .then(function artistName(value) {
-        res.artistName = value;
-        console.log(res);
+    .then(function artistAdd(value) {
+        valObj.name = value;
         addArtist();
+        return prompt.multiline('Press enter to view current full list of artists')
+    })
+    .then(function displayAll() {
+        displayArtists();
         prompt.done();
     })
     .catch((err) => {
@@ -36,16 +45,27 @@ prompt(`Welcome to the ${config.database} database. Press enter to start input o
         prompt.finish();
     });    
 
-function addArtist () {
 
-    let query = "INSERT INTO artist (artist_name) VALUES ($1);";
 
-    db.result(query, res.artistName)
-        .then(function(res) {
-            console.log(res);
+function displayArtists () {
+    Artist.findAll()
+        .then((res) => {
+            res.forEach((row) => {
+                console.log(row.dataValues.artist_name);
+            })
         })
-        .catch((err) => {
-            console.error('There was an error uploading to database: ' + err.stack);
-        });
+        .catch((error) => {
+            console.error('There was an error: ' + error.stack);
+        })
 };
 
+
+function addArtist () {
+    Artist.create({ artist_name: valObj.name })
+        .then((artist) => {
+            console.log('New artist added!');
+        })
+        .catch((err) => {
+            console.error('Whoaaaa There SMART GUY.. There was a problem: ' + err.stack);
+        });
+};

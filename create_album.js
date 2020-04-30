@@ -1,47 +1,55 @@
 
-const config = {
-
-    host: 'localhost',
-    port: 5432,
-    database: 'music_db',
-    user: 'postgres'
-
-};
-
-const pgp = require('pg-promise')();
-const db = pgp(config);
-const co = require('co');
 const prompt = require('prompt-promise');
+const Sequelize = require('sequelize');
 
+const Model = Sequelize.Model;
 
-  //Attempted to export modules and require them here, but ran into errors
+class Album extends Model {}
 
-//const db = require('./create_artist');
-//const prompt = require('./create_artist');
+Album.init({
 
+    album_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    artist_id: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: Artist,
+            key: 'id'
+        }
+    },
+    release_year: {
+        type: Sequelize.INTEGER
+    }
 
+}, {
+    sequelize,
+    modelName: 'Album',
+    tableName: 'album',
+    timestamps: false
+});
 
-let res = {
+let respObj = {
   albumName: '',
   albumYear: '',
   albumArtist: ''
 };
 
-prompt(`Welcome to the ${config.database} database. Press enter to start input of album data`)
+prompt(`Welcome to the music database. Press enter to begin entering new album data`)
     .then(function goToInput() {
         return prompt.multiline('Enter album name: ');
     })
     .then(function albumName(val) {
-        res.albumName = val;
+        respObj.albumName = val;
         return prompt.multiline('Enter album release year: ');
     })
     .then(function albumYear(val) {
-        res.albumYear = val;
+        respObj.albumYear = val;
         return prompt.multiline('Enter artist reference ID: ');
     })
     .then(function albumArtist(val) {
-        res.albumArtist = val;
-        console.log(res);
+        respObj.albumArtist = val;
         addAlbum();
         prompt.done();
     })
@@ -52,14 +60,12 @@ prompt(`Welcome to the ${config.database} database. Press enter to start input o
 
 function addAlbum () {
 
-    let query = "INSERT INTO album (album_name, release_year, artist_id) VALUES (${albumName}, ${albumYear}, ${albumArtist});";
-        
-    db.result(query, res)
-        .then(function(res) {
-            console.log(res);
+    Album.create( {album_name: respObj.albumName, release_year: respObj.albumYear, artist_id: respObj.albumArtist})
+        .then((album) => {
+            console.log('Album successfully created!')
         })
         .catch((err) => {
-            console.error('This fd up somewhere in the db-result: ' + err);
+            console.error('Whoa homie.. slow ur dang roll: ' + err.stack);
         });
-        
+
 };

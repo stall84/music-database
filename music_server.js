@@ -23,7 +23,7 @@ function queryArtists() {
     Artist.findAll()
         .then((res) => {
             res.forEach((entry) =>
-            console.log(entry));
+            console.log(entry.dataValues.artist_name));
         })
         .catch((err) => {
             console.error('Bro.. Did you really think this would work? ' + err.stack);
